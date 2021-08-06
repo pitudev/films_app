@@ -33,9 +33,11 @@ class MovieSearchDelegate extends SearchDelegate {
       return _emptyContainer();
     }
 
+    print('HTTP request');
+
     final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
 
-    return FutureBuilder(
+    return StreamBuilder(
       builder: (_, AsyncSnapshot<List<Movie>> snapshot) {
         if (!snapshot.hasData){
           return _emptyContainer();
@@ -48,7 +50,7 @@ class MovieSearchDelegate extends SearchDelegate {
           itemBuilder: ( _ , int index) => _MovieResultItem(movies[index])
         );
       },
-      future: moviesProvider.searchMovies(query),
+      stream: moviesProvider.suggestionsStream,
     );
   }
 
